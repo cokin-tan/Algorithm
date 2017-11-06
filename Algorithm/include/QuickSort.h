@@ -15,9 +15,11 @@ public:
 private:
 	void		Sort(int nStart, int nEnd);
 	void		RandomSort(int nStart, int nEnd);
+	void        HoareSort(int nStart, int nEnd);
 	int 		PartitionSingle(int nStart, int nEnd);
 	int 		PartitionDouble(int nStart, int nEnd);
 	int			RandomPartition(int nStart, int nEnd);
+	int			HoarePartition(int nStart, int nEnd);
 
 private:
 	T*			m_pArr;
@@ -30,7 +32,7 @@ CQuickSort<T>::CQuickSort(T* pArr, int nLength):
 	m_nLength(nLength)
 {
 	assert(nullptr != m_pArr);
-	RandomSort(0, m_nLength - 1);
+	HoareSort(0, m_nLength - 1);
 }
 
 template<typename T>
@@ -123,4 +125,44 @@ int CQuickSort<T>::RandomPartition(int nStart, int nEnd)
 	int nRandomIndex = std::rand() % (nEnd - nStart + 1) + nStart;
 	Swap<T>(m_pArr[nRandomIndex], m_pArr[nEnd]);
 	return PartitionSingle(nStart, nEnd);
+}
+
+template<typename T>
+void CQuickSort<T>::HoareSort(int nStart, int nEnd)
+{
+	if (nStart < nEnd)
+	{
+		int nIndex = HoarePartition(nStart, nEnd);
+		HoareSort(nStart, nIndex);
+		HoareSort(nIndex + 1, nEnd);
+	}
+}
+
+template<typename T>
+int CQuickSort<T>::HoarePartition(int nStart, int nEnd)
+{
+	T temp = m_pArr[nStart];
+	int nLeft = nStart - 1;
+	int nRight = nEnd + 1;
+	while (true)
+	{
+		do
+		{
+			--nRight;
+		} while (m_pArr[nRight] > temp);
+
+		do
+		{
+			++nLeft;
+		} while (m_pArr[nLeft] < temp);
+	
+		if (nLeft < nRight)
+		{
+			Swap<T>(m_pArr[nLeft], m_pArr[nRight]);
+		}
+		else
+		{
+			return nRight;
+		}
+	}
 }
