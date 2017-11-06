@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include<cassert>
+#include<ctime>
 
 #include "Utils.h"
 
@@ -13,8 +14,10 @@ public:
 
 private:
 	void		Sort(int nStart, int nEnd);
+	void		RandomSort(int nStart, int nEnd);
 	int 		PartitionSingle(int nStart, int nEnd);
 	int 		PartitionDouble(int nStart, int nEnd);
+	int			RandomPartition(int nStart, int nEnd);
 
 private:
 	T*			m_pArr;
@@ -27,7 +30,7 @@ CQuickSort<T>::CQuickSort(T* pArr, int nLength):
 	m_nLength(nLength)
 {
 	assert(nullptr != m_pArr);
-	Sort(0, m_nLength - 1);
+	RandomSort(0, m_nLength - 1);
 }
 
 template<typename T>
@@ -100,4 +103,24 @@ void CQuickSort<T>::Print() const
 		std::cout << m_pArr[nIndex] << " ";
 	}
 	std::cout << std::endl;
+}
+
+template<typename T>
+void CQuickSort<T>::RandomSort(int nStart, int nEnd)
+{
+	if (nStart < nEnd)
+	{
+		int nIndex = RandomPartition(nStart, nEnd);
+		RandomSort(nStart, nIndex - 1);
+		RandomSort(nIndex + 1, nEnd);
+	}
+}
+
+template<typename T>
+int CQuickSort<T>::RandomPartition(int nStart, int nEnd)
+{
+	srand((unsigned)time(nullptr));
+	int nRandomIndex = std::rand() % (nEnd - nStart + 1) + nStart;
+	Swap<T>(m_pArr[nRandomIndex], m_pArr[nEnd]);
+	return PartitionSingle(nStart, nEnd);
 }
