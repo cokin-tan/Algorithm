@@ -10,6 +10,7 @@ public:
 	T		HeapFirstPriority() const;
 	T       HeapExtractFirstPriority();
 	void    HeapModifyKey(int nIndex, T key);
+	void	Print() const;
 
 public:
 	bool	IsEmpty() const;
@@ -47,4 +48,10 @@ template<typename T>
 void CPrirotyQueue<T>::HeapModifyKey(int nIndex, T key)
 {
 	m_heap.HeapModifyKey(nIndex, key);
+}
+
+template<typename T>
+void CPrirotyQueue<T>::Print() const
+{
+	m_heap.Print();
 }

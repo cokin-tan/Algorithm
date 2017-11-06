@@ -26,6 +26,7 @@ public:
 	T           ExtraRoot();
 	bool		IsEmpty() const;
 	void		HeapModifyKey(int nIndex, T key);
+	void        HeapDelete(int nIndex);
 
 private:
 	int			Parent(int nIndex) const;
@@ -35,6 +36,7 @@ private:
 	void		MinHeapify(int nIndex, int nHeapSize);
 	void		BuildHeap(heapSortCallBack pFunc);
 	void		HeapSort(heapSortCallBack pFunc);
+	bool		Compare(const T& lhs, const T& rhs) const;
 
 private:
 	T*			m_pArr;
@@ -128,6 +130,7 @@ void CHeapSort<T>::MaxHeapify(int nIndex, int nHeapSize)
 	if (nLargest != nIndex)
 	{
 		Swap<T>(m_pArr[nIndex], m_pArr[nLargest]);
+		Print();
 		MaxHeapify(nLargest, nHeapSize);
 	}
 }
@@ -194,6 +197,7 @@ T CHeapSort<T>::ExtraRoot()
 	{
 		T max = m_pArr[0];
 		m_pArr[0] = m_pArr[m_nLength - 1];
+		std::cout << m_pArr[0] << std::endl;
 		--m_nLength;
 		if (EType_Max == m_type)
 		{
@@ -213,6 +217,19 @@ template<typename T>
 bool CHeapSort<T>::IsEmpty() const
 {
 	return nullptr == m_pArr || 0 >= m_nLength;
+}
+
+template<typename T>
+bool CHeapSort<T>::Compare(const T& lhs, const T& rhs) const
+{
+	if (EType_Min == m_type)
+	{
+		return lhs > rhs;
+	}
+	else
+	{
+		return lhs < rhs;
+	}
 }
 
 template<typename T>
@@ -241,7 +258,7 @@ void CHeapSort<T>::HeapModifyKey(int nIndex, T key)
 	m_pArr[nIndex] = key;
 	while (nIndex >= 0)
 	{
-		if ((EType_Min == m_type && m_pArr[Parent(nIndex)] > m_pArr[nIndex]) || (EType_Max == m_type && m_pArr[Parent(nIndex)] < m_pArr[nIndex]))
+		if (Compare(m_pArr[Parent(nIndex)], m_pArr[nIndex]))
 		{
 			Swap<T>(m_pArr[Parent(nIndex)], m_pArr[nIndex]);
 			nIndex = Parent(nIndex);
@@ -251,4 +268,16 @@ void CHeapSort<T>::HeapModifyKey(int nIndex, T key)
 			break;
 		}
 	}
+}
+
+template<typename T>
+void CHeapSort<T>::HeapDelete(int nIndex)
+{
+	if (nIndex < 0 || nIndex >= m_nLength)
+	{
+		throw exception("the index out of range");
+	}
+
+	int nLeft = Left(nIndex);
+	int nRight = Right(nIndex);
 }
