@@ -2,6 +2,7 @@
 
 #include "PriorityQueue.h"
 #include "QuickSort.h"
+#include "CountSort.h"
 
 using namespace std;
 
@@ -11,8 +12,7 @@ int main(int argc, char** argv)
 	int arr[] = { 15, 13, 12, 11, 10, 9, 8, 7, 6, 5, 2, 1 };
 	int nLength = 12;
 
-	CQuickSort<int> quickSort(arr, nLength);
-	quickSort.Print();
-
+	CCountSort sort(arr, 12, 15);
+	
 	system("pause");
 }
